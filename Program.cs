@@ -16,6 +16,16 @@ Console.WriteLine($"Versión: {version}");
 Console.WriteLine($"Plataforma: {Environment.OSVersion}");
 Console.WriteLine($".NET Version: {Environment.Version}");
 Console.WriteLine();
+
+Console.WriteLine("Estructura del proyecto:");
+Console.WriteLine(" InventarioApp/");
+Console.WriteLine("  |--program.cs");
+Console.WriteLine("  |--InventarioApp.csproj");
+Console.WriteLine("  |--gitignore");
+Console.WriteLine("  |--README.md");
+Console.WriteLine("  |--src/");
+Console.WriteLine("    |--Models/ (Proxima clase");
+
 Console.WriteLine("Estado: Proyecto inicializado");
 Console.WriteLine("Carpeta src/ creada");
 Console.WriteLine("Metadatos configurados");

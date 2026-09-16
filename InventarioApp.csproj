@@ -10,6 +10,7 @@
   <AssemblyName>InventarioApp</AssemblyName>
   <RootNamespace>InventarioApp</RootNamespace>
   <Version>1.0.0</Version>
+  <Authors>Henry Cabrera</Authors>
   <Description>Sistema de gestion de inventario - Curso de Fundamentos de .NET</Description>
   </PropertyGroup>
 </Project>

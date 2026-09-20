@@ -8,6 +8,8 @@ using System.Reflection;
 var assembly = Assembly.GetExecutingAssembly();
 var version = assembly.GetName().Version;
 
+MostrarBanner();
+
 if (args.Length > 0)
 {
 	switch (args[0].ToLower())
@@ -34,13 +36,24 @@ bool sistemaActivo = true;
 string nombreSistema =  "Gestion de inventario";
 decimal precio = 19.99m;
 
-Console.WriteLine("Estado del sistema ");
+// readline puede devolver null
+// Console.WriteLine("Ingrese un comando: ");
+// string? entrada = Console.ReadLine();
+// int? longitud  = entrada?.Length; 
+
+// operador coalesing
+// string comandoLimpio =  string.IsNullOrWhiteSpace(entrada) ? "salir" : entrada.Trim().ToLower();
+// Console.WriteLine($"longitud: {longitud ?? 0}");
+// Console.WriteLine($"Comando limpio: {comandoLimpio}");
+
+
+Console.WriteLine("[== Estado del sistema ==]");
 Console.WriteLine($"Nombre del sistema: {nombreSistema}");
 Console.WriteLine($"Productos: {cantidadProductos}");
 Console.WriteLine($"Valor del inventario: {valorTotalInventario:N2}");
 Console.WriteLine($"Sistema activo: {(sistemaActivo ? "Si" : "No")}");
 
-Console.Write("Ingrese una cantid: ");
+Console.Write("Ingrese una cantidad: ");
 string? entradaCantidad = Console.ReadLine();
 
 if (int.TryParse(entradaCantidad, out int cantidad))
@@ -53,7 +66,7 @@ else
 	Console.WriteLine("Error, debe ingresar un numero entero");
 }
 
-Console.Write("Ingrese un precion: ");
+Console.Write("Ingrese un precio: ");
 string? entradaPrecio = Console.ReadLine();
 
 if (decimal.TryParse(entradaPrecio, out decimal precioProducto))
@@ -67,18 +80,47 @@ else
 	Console.WriteLine("Error, debe ingresar un numero decimal.");
 }
 
+// Loop de nullabilidad
+Console.WriteLine("Comandos: listar, agregar, buscar, salir");
+Console.WriteLine();
+
+while (sistemaActivo)
+{
+    Console.Write("inventario: ");
+    string? entrada = Console.ReadLine();
+
+    string comando = string.IsNullOrWhiteSpace(entrada) ? "salir" : entrada.Trim().ToLower();
+    switch (comando)
+    {
+        case "salir":
+            Console.WriteLine("Saliendo del programa...");
+            sistemaActivo = false;
+            break;
+        case "listar":
+            Console.WriteLine($"Lista de productos: {cantidadProductos}");
+            break;
+        case "":
+            break;
+        default:
+            Console.WriteLine($"Error: comando desconocido '{comando}'");
+            Console.WriteLine("Comandos disponibles: listar, agregar, buscar, salir");
+            break;
+    }
+}
+
+
 //MostrarBanner();
 
 // Modo interactivo si no ingresa argumentos
 
-Console.Write("Ingrese comando o 'salir' para abandonar: ");
-string? entrada = Console.ReadLine();
+// Console.Write("Ingrese comando o 'salir' para abandonar: ");
+// string? entrada2 = Console.ReadLine();
 
-if (string.IsNullOrWhiteSpace(entrada) || entrada.ToLower() == "salir")
-{
-	Console.WriteLine("Saliendo del programa...");
-	Environment.Exit(0);
-}
+// if (string.IsNullOrWhiteSpace(entrada2) || entrada2.ToLower() == "salir")
+// {
+// 	Console.WriteLine("Saliendo del programa...");
+// 	Environment.Exit(0);
+// }
 
 /*
 Console.WriteLine("Estructura del proyecto:");

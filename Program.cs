@@ -1,143 +1,65 @@
-﻿// ============================================================
-// SISTEMA DE INVENTARIO - Clase 1.1
-// Estado: Mensaje de bienvenida
-// ============================================================
-
+﻿// SISTEMA DE INVENTARIO - Módulo 3 Completo
 using System.Reflection;
+using InventarioApp.Models;
+using InventarioApp.src.Factories;
 
 var assembly = Assembly.GetExecutingAssembly();
 var version = assembly.GetName().Version;
 
+// Lista temporal de productos (se reemplazará por Repository en Módulo 4)
+var productos = new List<Producto>();
+
 MostrarBanner();
-
-if (args.Length > 0)
-{
-	switch (args[0].ToLower())
-	{
-		case "--help":
-			MostrarAyuda();
-			Environment.Exit(0);
-			break;
-		case "--version":
-			Console.WriteLine($"Version del proyecto: {version}");
-			Environment.Exit(0);
-			break;
-		default:
-			Console.WriteLine($"ERROR: Comando desconocido: {args[0]}");
-			Console.WriteLine("Utiliza el comando --help para ver los comandos disponibles");
-			Environment.Exit(1);
-			break;
-	}
-}
-
-int cantidadProductos = 0;
-decimal valorTotalInventario = 0.00m;
-bool sistemaActivo = true;
-string nombreSistema =  "Gestion de inventario";
-decimal precio = 19.99m;
-
-// readline puede devolver null
-// Console.WriteLine("Ingrese un comando: ");
-// string? entrada = Console.ReadLine();
-// int? longitud  = entrada?.Length; 
-
-// operador coalesing
-// string comandoLimpio =  string.IsNullOrWhiteSpace(entrada) ? "salir" : entrada.Trim().ToLower();
-// Console.WriteLine($"longitud: {longitud ?? 0}");
-// Console.WriteLine($"Comando limpio: {comandoLimpio}");
-
-
-Console.WriteLine("[== Estado del sistema ==]");
-Console.WriteLine($"Nombre del sistema: {nombreSistema}");
-Console.WriteLine($"Productos: {cantidadProductos}");
-Console.WriteLine($"Valor del inventario: {valorTotalInventario:N2}");
-Console.WriteLine($"Sistema activo: {(sistemaActivo ? "Si" : "No")}");
-
-Console.Write("Ingrese una cantidad: ");
-string? entradaCantidad = Console.ReadLine();
-
-if (int.TryParse(entradaCantidad, out int cantidad))
-{
-	Console.Write($"Cantidad valida: {cantidad}\n");
-	cantidadProductos = cantidad;
-}
-else
-{
-	Console.WriteLine("Error, debe ingresar un numero entero");
-}
-
-Console.Write("Ingrese un precio: ");
-string? entradaPrecio = Console.ReadLine();
-
-if (decimal.TryParse(entradaPrecio, out decimal precioProducto))
-{
-	Console.Write($"Precio valido: {precioProducto:C}\n");
-	valorTotalInventario = cantidadProductos * precioProducto;
-	Console.WriteLine($"Nuevo valor de inventario {valorTotalInventario:N2}");
-}
-else
-{
-	Console.WriteLine("Error, debe ingresar un numero decimal.");
-}
-
-// Loop de nullabilidad
 Console.WriteLine("Comandos: listar, agregar, buscar, salir");
 Console.WriteLine();
 
-while (sistemaActivo)
+bool continuar = true;
+while (continuar)
 {
-    Console.Write("inventario: ");
-    string? entrada = Console.ReadLine();
+    var comando = LeerEntrada("inventario> ");
+    continuar = ProcesarComando(comando);
+}
 
-    string comando = string.IsNullOrWhiteSpace(entrada) ? "salir" : entrada.Trim().ToLower();
+Environment.Exit(0);
+
+// ══════════════════════════════════════════════════════════════════
+// MÉTODOS LOCALES
+// ══════════════════════════════════════════════════════════════════
+
+bool ProcesarComando(string comando)
+{
     switch (comando)
     {
         case "salir":
-            Console.WriteLine("Saliendo del programa...");
-            sistemaActivo = false;
-            break;
+        case "exit":
+        case "q":
+            Console.WriteLine("¡Hasta luego!");
+            return false;
+
         case "listar":
-            Console.WriteLine($"Lista de productos: {cantidadProductos}");
+            ListarProductos();
             break;
+
+        case "agregar":
+            AgregarProducto();
+            break;
+
+        case "buscar":
+            BuscarProducto();
+            break;
+
         case "":
             break;
+
         default:
-            Console.WriteLine($"Error: comando desconocido '{comando}'");
-            Console.WriteLine("Comandos disponibles: listar, agregar, buscar, salir");
+            Console.WriteLine($"❌ Comando '{comando}' no reconocido");
+            Console.WriteLine("   Use: listar, agregar, buscar, salir");
             break;
     }
+
+    Console.WriteLine();
+    return true;
 }
-
-
-//MostrarBanner();
-
-// Modo interactivo si no ingresa argumentos
-
-// Console.Write("Ingrese comando o 'salir' para abandonar: ");
-// string? entrada2 = Console.ReadLine();
-
-// if (string.IsNullOrWhiteSpace(entrada2) || entrada2.ToLower() == "salir")
-// {
-// 	Console.WriteLine("Saliendo del programa...");
-// 	Environment.Exit(0);
-// }
-
-/*
-Console.WriteLine("Estructura del proyecto:");
-Console.WriteLine(" InventarioApp/");
-Console.WriteLine("  |--program.cs");
-Console.WriteLine("  |--InventarioApp.csproj");
-Console.WriteLine("  |--gitignore");
-Console.WriteLine("  |--README.md");
-Console.WriteLine("  |--src/");
-Console.WriteLine("    |--Models/ (Proxima clase");
-
-Console.WriteLine("Estado: Proyecto inicializado");
-Console.WriteLine("Carpeta src/ creada");
-Console.WriteLine("Metadatos configurados");
-Console.WriteLine();
-Console.WriteLine("Proximo paso: Agregar argumentos CLI y configuracion de repositorio en Github");
-*/
 
 void MostrarBanner()
 {
@@ -147,19 +69,93 @@ void MostrarBanner()
     Console.WriteLine();
     Console.WriteLine($"Versión: {version}");
     Console.WriteLine($".NET: {Environment.Version}");
-    Console.WriteLine($"Sistema: {Environment.OSVersion.Platform}");
     Console.WriteLine();
 }
 
-void MostrarAyuda()
+string LeerEntrada(string prompt)
 {
-    Console.WriteLine("USO: InventarioApp [comando] [opciones]");
-    Console.WriteLine();
-    Console.WriteLine("COMANDOS:");
-    Console.WriteLine("  --help, -h      Muestra esta ayuda");
-    Console.WriteLine("  --version, -v   Muestra la version del programa");
-    Console.WriteLine();
-    Console.WriteLine("EJEMPLOS:");
-    Console.WriteLine(" dotnet run -- --help");
-    Console.WriteLine(" dotnet run -- --version");
+    Console.Write(prompt);
+    return Console.ReadLine()?.Trim().ToLower() ?? "";
+}
+
+void ListarProductos()
+{
+    if (productos.Count == 0)
+    {
+        Console.WriteLine("📦 No hay productos en el inventario.");
+        return;
+    }
+
+    Console.WriteLine("\n=== PRODUCTOS ===");
+    foreach (var p in productos)
+    {
+        Console.WriteLine($"ID: {p.Id} | {p.Nombre} | ${p.Precio:F2} | Cant: {p.Cantidad} | Total: ${p.ValorTotal:F2}");
+    }
+    Console.WriteLine($"\nTotal: {productos.Count} producto(s)");
+}
+
+void AgregarProducto()
+{
+    Console.WriteLine("\n--- Agregar Producto ---");
+
+    Console.Write("Nombre: ");
+    string nombre = Console.ReadLine() ?? "";
+
+    Console.Write("Precio: ");
+    if (!decimal.TryParse(Console.ReadLine(), out decimal precio))
+    {
+        Console.WriteLine("⚠ Precio inválido.");
+        return;
+    }
+
+    Console.Write("Cantidad: ");
+    if (!int.TryParse(Console.ReadLine(), out int cantidad))
+    {
+        Console.WriteLine("⚠ Cantidad inválida.");
+        return;
+    }
+
+    Console.WriteLine("\nCategorías: Electronica, Ropa, Alimentos, Hogar, Deportes, Libros, Otros");
+    Console.Write("Categoría: ");
+    string catStr = Console.ReadLine() ?? "Otros";
+
+    if (!Enum.TryParse<CategoriaProducto>(catStr, true, out var categoria))
+    {
+        categoria = CategoriaProducto.Otros;
+    }
+
+    try
+    {
+        var producto = ProductoFactory.Crear(nombre, precio, cantidad, categoria);
+        productos.Add(producto);
+        Console.WriteLine($"\n✓ Producto '{producto.Nombre}' agregado con ID {producto.Id}");
+    }
+    catch (ArgumentException ex)
+    {
+        Console.WriteLine($"\n⚠ Error: {ex.Message}");
+    }
+}
+
+void BuscarProducto()
+{
+    Console.WriteLine("🔍 Función buscar (se implementará completamente en Módulo 4)");
+    
+    Console.Write("\nBuscar por nombre: ");
+    string termino = Console.ReadLine() ?? "";
+
+    var encontrados = productos
+        .Where(p => p.Nombre.Contains(termino, StringComparison.OrdinalIgnoreCase))
+        .ToList();
+
+    if (encontrados.Count == 0)
+    {
+        Console.WriteLine($"No se encontraron productos con '{termino}'");
+        return;
+    }
+
+    Console.WriteLine($"\n=== {encontrados.Count} resultado(s) ===");
+    foreach (var p in encontrados)
+    {
+        Console.WriteLine($"ID: {p.Id} | {p.Nombre} | ${p.Precio:F2}");
+    }
 }

@@ -20,3 +20,5 @@ InventarioApp/
 
 ## Progreso del curso
 - [x] Modulo 1: El ecosistema .NET
+- [x] Modulo 2: Entradas, salidas y tipos
+- [x] Modulo 3: Funciones y modelado de dominio

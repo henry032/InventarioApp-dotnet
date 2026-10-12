@@ -5,11 +5,7 @@ using InventarioApp.Models;
 public static class ProductoFactory
 {
     private static int _nextId = 1;
-    public static Producto Crear(
-		string nombre, 
-		decimal precio, 
-		int cantidad, 
-		CategoriaProducto categoria = CategoriaProducto.Otros)
+    public static Producto Crear(string nombre, decimal precio, int cantidad, CategoriaProducto categoria = CategoriaProducto.Otros)
     {
         if (string.IsNullOrWhiteSpace(nombre))
         {

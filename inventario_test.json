@@ -1,0 +1,22 @@
+[
+  {
+    "id": 1,
+    "nombre": "Laptop",
+    "precio": 999.99,
+    "cantidad": 10,
+    "categoria": "Electronica",
+    "estado": "Activo",
+    "fechaRegistro": "2026-10-12T21:11:33.9625539-06:00",
+    "valorTotal": 9999.90
+  },
+  {
+    "id": 2,
+    "nombre": "Agua",
+    "precio": 10.99,
+    "cantidad": 25,
+    "categoria": "Alimentos",
+    "estado": "Activo",
+    "fechaRegistro": "2026-10-12T21:11:33.9730223-06:00",
+    "valorTotal": 274.75
+  }
+]
